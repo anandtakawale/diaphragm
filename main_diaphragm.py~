@@ -1,0 +1,73 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Aug 28 17:18:39 2013
+
+@author: anand
+"""
+from membrane import *
+import xlwt
+
+def writeout(book, X, Y, xlabel, ylabel, sheet, title):
+    """
+    Writes the data in lists x and y into xls file in the given sheet
+    """
+    sh = book.add_sheet(sheet, cell_overwrite_ok=True)
+    sh.write(0, 0, title)
+    sh.write(1, 0, xlabel)
+    sh.write(1, 1, ylabel)
+    for i in range(len(X)):
+        sh.write(i + 2, 0, X[i])
+        sh.write(i + 2, 1, Y[i])
+
+def excelwrite():
+    """
+    Writes into excel file
+    """
+    book = xlwt.Workbook()
+    deflect = detDeflectTensile(P, diaphNB40_50)
+    deflect = [y * 10.0**3 for y in deflect]
+    writeout(book, P, deflect, "Pressure(Pa)", "Deflection(mm)", 
+          "NB40_50", "Pressure vs deflection NB40 and 50")
+    #writing for NB15 and 20
+    deflect = detDeflectTensile(P, diaphNB15_20)
+    deflect = [y * 10.0**3 for y in deflect]
+    writeout(book, P, deflect, "Pressure(Pa)", "Deflection(mm)",
+             "NB15_20", "Pressure vs deflection NB15 and 20")
+    #writing for NB25
+    deflect = detDeflectTensile(P, diaphNB25)
+    deflect = [y * 10.0**3 for y in deflect]
+    writeout(book, P, deflect, "Pressure(Pa)", "Deflection(mm)",
+             "NB25", "Pressure vs deflection NB15 and 20")
+    book.save("Pvsy.xls")
+    
+if __name__ == '__main__':
+    #plt.close("all") # close all previous figures
+    P_max = 8 * 10**5
+    P = np.arange(0,P_max,P_max/1000.0 )
+    #Consideration of only tensile stresses
+    plt.figure("Flat diaphragm:P vs. y(tensile)")
+    plotPvsyTensile(P, diaphNB40_50, "Diaphragm 40 and 50NB")
+    plotPvsyTensile(P, diaphNB15_20, "Diaphragm 15 and 20NB")
+    plotPvsyTensile(P, diaphNB25, "Diaphragm 25NB")
+    plt.title("Pressure vs deflection considering tensile")
+    #considering of tensile and bending stresses
+    plt.figure("Flat diaphragm:P vs. y(tensile + bending)")
+    plotPvsyTensileBending(P, diaphNB40_50, "Diaphragm 40 and 50NB")
+    plotPvsyTensileBending(P, diaphNB15_20, "Diaphragm 15 and 20NB")
+    plotPvsyTensileBending(P, diaphNB25, "Diaphragm 25NB")
+    plt.title("Pressure vs deflection considering tensile and bending")
+    #tensile and bending comparison for 40 and 50 NB diaphragm
+    plt.figure("Tensile and Tensile + bending comparison")
+    plotPvsyTensile(P, diaphNB40_50, "Diaphragm 40 and 50NB Tensile")
+    plotPvsyTensileBending(P, diaphNB40_50, "Diaphragm 40 and 50NB Tensile and Bending")
+    #plotting radial stresses for NB40,50,15,20,25
+    plt.figure("Flat diaphargm Pressure vs max radial stress")
+    plotPvssigmaR(P, diaphNB40_50, "Diaphragm 40 and 50 NB radial stress")
+    plotPvssigmaR(P, diaphNB15_20, "Diaphragm 15 and 20 NB radial stress")
+    plotPvssigmaR(P, diaphNB25, "Diaphragm 25NB radial stress")
+    plt.title("Pressure vs. maximum stress")
+    plt.show()
+    excelwrite()
+    
+    
+    
