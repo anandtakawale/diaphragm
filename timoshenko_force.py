@@ -58,7 +58,7 @@ def plotPvsy(P, diaphragm, legend = "", color = ""):
 
 
 if __name__ == "__main__":
-    F_max = 5e3
+    F_max = 5e2
     F = np.arange(0,F_max,F_max/1000.0)
     plt.close('all')
     diaph = [diaphNB40_50, diaphNB25, diaphNB15_20]

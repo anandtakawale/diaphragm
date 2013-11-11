@@ -4,6 +4,8 @@ Created on Wed Aug 28 16:44:38 2013
 
 @author: rndengg2
 """
+import numpy as np
+
 class Material():
     """
     Material class with follwoing properties
@@ -76,11 +78,22 @@ class DiaphragmCorrugated(Diaphragm):
         H: Dept of corrugation [mm]
         s: Developed length [mm]
         l: wavelength of corrugations [mm]
+        q: profile factor []
+        Ap: dimensionless stiffness coefficient for linear term
+        Bp: dimensionless stiffness coefficient for non-linear term
+        Ks: Tangential stress factor []
+        Kr: Radial stress factor []
         """
         self.assignProp(FlatDiaph)
         self.H = H * 1e-3
         self.s = s * 1e-3
         self.l = l * 1e-3
+        self.q = (1.5 * (self.H / self.h)**2 + 1)**0.5
+        self.Ap = 2*(3 + self.q)*(1 + self.q)/(3 * (1 - (self.mu/self.q)**2))
+        self.Bp = 32.0 / (self.q**2 - 9) * (1.0/6  - (3 - self.mu)/((self.q - self.mu) * (self.q + 3)))
+        self.Ks = (3 + np.sqrt(6 * (self.q**2  - 1)))/((self.q - 1)*(self.q + 3)) * (2.0 / (self.q - 1))**(2.0 / (self.q -3))
+        self.Kr = (6.0/(self.q * (self.q -1)))**(1.0 / (self.q -3))
+        self.G = 1 + 0.025 * ((self.H * self.l)/(self.h * self.a))**2
     
 
 #setting material SS304

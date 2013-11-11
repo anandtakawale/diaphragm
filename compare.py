@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
     plt.close('all')
-    P_max = 4 * 10**5
+    P_max = 2 * 10**5
     P = np.arange(0,P_max + P_max/1000.0,P_max/1000.0 )
     #considering of tensile and bending stresses
     # for NB40 and 50
