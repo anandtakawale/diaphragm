@@ -42,7 +42,7 @@ def graph(x, y, xlabel = "", ylabel = "", legend = "", color = ""):
     plt.ylabel(ylabel)
     plt.legend(loc = 'best')
     plt.grid()
-    plt.xticks(np.arange(0, max(x), max(x)/10.0))
+    #plt.xticks(np.arange(0, max(x), max(x)/10.0))
     
 
 def tensileDeflect(P, diaphragm):
@@ -69,8 +69,8 @@ def plotPvsyTensile(P, diaphragm, legend, color = ""):
     
     """
     #diaphragm properties
-    deflect = [tensileDeflect(p, diaphragm) * 1e3 for p in P]
-    graph(P, deflect, "Pressure(Pa)", "Deflection(mm)", legend, color)
+    deflect = tensileBendingDeflect(P, diaphragm)
+    graph(P * 1e-5, deflect, "Pressure(Pa)", "Deflection(mm)", legend, color)
 
 def plotPvsyTensileBending(P, diaphragm, legend, color = ""):
     """
@@ -80,51 +80,52 @@ def plotPvsyTensileBending(P, diaphragm, legend, color = ""):
     legend: legend for the plot
     """
     #diaphragm properties
-    deflect = [tensileBendingDeflect(p, diaphragm) * 1e3 for p in P]
-    graph(P, deflect, "Pressure(Pa)", "Deflection(mm)", legend, color)
-
-def detDeflectTensile(P, diaphragm):
-    """
-    Returns the deflection for given list of pressures and for given diaphragm
-    """
-    return [tensileBendingDeflect(p, diaphragm) for p in P]
+    deflect = tensileBendingDeflect(P, diaphragm) * 1e3
+    graph(P * 1e-5, deflect, "Pressure(Pa)", "Deflection(mm)", legend, color)
     
 def plotPvssigmaR(P, diaphragm, legend):
     """
     Plots variation of maximum radial stress with pressure
     """
     #maximum deflection for given pressure
-    deflect = detDeflectTensile(P, diaphragm)
+    deflect = tensileBendingDeflect(P, diaphragm)
     sigma_max = [sigmaRmax(y, diaphragm) for y in deflect]
-    graph(P, sigma_max, "Pressure(Pa)", "Radial Stress(Pa)", legend = legend)
+    graph([p * 1e-5 for p in P], sigma_max, "Pressure(Pa)", "Radial Stress(Pa)", legend = legend)
     sigma_allow = [maxShear(diaphragm) for x in range(len(P))]
-    graph(P, sigma_allow, "Pressure(Pa)", "Radial Stress(Pa)", legend = "Maximum allowable")
+    graph([p * 1e-5 for p in P], sigma_allow, "Pressure(Pa)", "Radial Stress(Pa)", legend = "Maximum allowable")
     
 def plotPvssigmaT(P, diaphragm, legend):
     """
     Plots variation of maximum tangential stress with pressure
     """
     #maximum deflection for given pressure
-    deflect = detDeflectTensile(P, diaphragm)
+    deflect = tensileBendingDeflect(P, diaphragm)
     sigma_max = [sigmaTmax(y, diaphragm) for y in deflect]
-    graph(P, sigma_max, "Pressure(Pa)", "Tangential Stress(Pa)", legend = legend)
+    graph([p * 1e-5 for p in P], sigma_max, "Pressure(Pa)", "Tangential Stress(Pa)", legend = legend)
     
 def tensileBendingDeflect(P, diaphragm):
     """
     Returns the deflection considering tensile as well as bending stresses
     
+    P:Pressure in [Pa] numpy array
+    
     All parameters follow same system of units(SI).
     """
-    coeff = []
+    coeff = np.zeros((len(P), 4))
     #coefficiet of y**3
-    coeff.append((7.0 - diaphragm.mu) / (3.0 * (1.0 - diaphragm.mu)) / diaphragm.h**3)
-    coeff.append(0.0)
-    coeff.append(16.0 / (3 * (1 - diaphragm.mu**2)) / diaphragm.h)
-    coeff.append(-P * diaphragm.a**4 / (diaphragm.E * diaphragm.h**4))
-    roots = np.roots(coeff)
-    for root in roots:
-        if root.imag == 0:
-            return root.real
+    coeff[:,0] = (7.0 - diaphragm.mu) / (3.0 * (1.0 - diaphragm.mu)) / diaphragm.h**3
+    #coefficient of y**2 is already made zero
+    #coefficient of y
+    coeff[:,2] = 16.0 / (3 * (1 - diaphragm.mu**2)) / diaphragm.h
+    #coefficient constant
+    coeff[:,3] = -P * diaphragm.a**4 / (diaphragm.E * diaphragm.h**4)
+    realRoot = np.zeros((len(P), 1))
+    for i in range(len(P)):
+        roots = np.roots(coeff[i,:])
+        for root in roots:
+            if root.imag == 0:
+                realRoot[i,0] = root.real
+    return realRoot
     
 def isShear(diaphragm):
     """
@@ -177,6 +178,25 @@ def calcMaxStress(P, diaphragm):
     #calculating deflection
     y = tensileBendingDeflect(P, diaphragm)
     return sigmaRmax(y, diaphragm)
+
+def plotyvssigmaR(P, diaphragm):
+    """
+    Plots the variation of maximum radial stress with deflection
+    """
+    deflection = tensileBendingDeflect(P, diaphragm)
+    sigma_max = sigmaRmax(deflection, diaphragm)
+    deflection = deflection * 1e3
+    graph(deflection, sigma_max, "Deflection[mm]", "Stress[Pa]", diaphragm.name + "Max radial stress")
+
+def plotyvssigmaT(P, diaphragm):
+    """
+    Plots the variation of maximum radial stress with deflection
+    """
+    deflection = tensileBendingDeflect(P, diaphragm)
+    sigma_max = sigmaTmax(deflection, diaphragm)
+    deflection = deflection * 1e3
+    graph(deflection, sigma_max, "Deflection[mm]", "Stress[Pa]", diaphragm.name + "Max tangential stress")
+
     
 if __name__ == '__main__':
     #close all previous figures

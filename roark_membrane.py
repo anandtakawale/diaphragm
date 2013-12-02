@@ -79,7 +79,7 @@ def plotPvsy(P, diaphragm, legend = "", color = ""):
     diaphragm: diaphragm used
     """
     y = tensileBendingDeflect(P, diaphragm)
-    graph(P, y * 1e3, "Pressure[Pa]", "Deflection[mm]", legend, color)
+    graph(P * 1e-5, y * 1e3, "Pressure[bar]", "Deflection[mm]", legend, color)
 
 def plotPvsSigmaRmax(P, diaphragm):
     """
@@ -91,7 +91,7 @@ def plotPvsSigmaRmax(P, diaphragm):
     y = tensileBendingDeflect(P, diaphragm)
     sigmaR = sigmaRmax(y, diaphragm)
     plt.title("Pressure vs maximum radial stress[Pa]")
-    graph(P, sigmaR, "Pressure[Pa]", "Stress[Pa]", diaphragm.name)
+    graph(P * 1e-5, sigmaR, "Pressure[bar]", "Stress[Pa]", diaphragm.name)
 
 def plotPvsSigmaEdge(P, diaphragm):
     """
@@ -103,14 +103,26 @@ def plotPvsSigmaEdge(P, diaphragm):
     y = tensileBendingDeflect(P, diaphragm)
     sigma = sigmaEdge(y, diaphragm)
     plt.title("Pressure vs edge stress")
-    graph(P, sigma, "Pressure[Pa]", "Stress[Pa]", "Edge stress")
+    graph(P * 1e-5, sigma, "Pressure[bar]", "Stress[Pa]", "Edge stress")
+
+def plotyvsSigmaEdge(P, diaphragm):
+    """
+    Plots variation of edge stress with change in deflection
+    
+    P: Pressure [Pa] numpy array
+    diaphragm: diaphragm used
+    """
+    deflect = tensileBendingDeflect(P, diaphragm)
+    sigma = sigmaEdge(deflect, diaphragm)
+    deflect = deflect * 1e3
+    graph(deflect, sigma, "Deflection[mm]", "Stress[Pa]", "Edge Stress")
 
 
 if __name__ == "__main__":
     P_max = 6e5
     P = np.arange(0,P_max,P_max/1000.0)
     plt.close('all')
-    diaph = [diaphNB40_50, diaphNB25, diaphNB15_20]
+    diaph = [diaphNB40_50, diaphNB25, diaphNB15_20, diaphNB40_50_double]
     for diaphUsed in diaph:
         y = tensileBendingDeflect(P, diaphUsed)
         plt.figure(diaphUsed.name)
@@ -119,7 +131,8 @@ if __name__ == "__main__":
         plotPvsSigmaRmax(P, diaphUsed)
         maxShear = Syt / 2.0
         #diaphragm maximum shear stress
-        graph(P, maxShear, "Pressure[Pa]", "Stress[Pa]", "Maximum shear stress")
+        graph(P * 1e-5, Syt, legend = "Tensile strength")
+        graph(P * 1e-5, maxShear, "Pressure[Pa]", "Stress[Pa]", "Maximum shear stress")
         #maximum radial stress which is at the center
         plotPvsSigmaEdge(P, diaphUsed)
     

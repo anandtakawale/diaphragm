@@ -73,7 +73,7 @@ def plotPvsy(P, diaphragm, legend):
     """
     deflect = [rigidCentreDeflect(p, diaphragm) * 10.0**3 for p in P]
     plt.title("Pressure deflection curve for diaphragm")
-    graph(P, deflect, "Pressure(Pa)", "Deflection(mm)", legend = legend)
+    graph([p * 1e-5 for p in P], deflect, "Pressure(Pa)", "Deflection(mm)", legend = legend)
     
 def detDeflectTensile(P, diaphragm):
     """
@@ -142,7 +142,7 @@ def plotPvssigmaR(P, diaphragm, legend):
     #maximum deflection for given pressure
     deflect = detDeflectTensile(P, diaphragm)
     sigma_max = [sigmaRmax(y, diaphragm) for y in deflect]
-    graph(P, sigma_max, "Pressure(Pa)", "Radial Stress(Pa)", legend = legend)  
+    graph([p * 1e-5 for p in P], sigma_max, "Pressure(Pa)", "Radial Stress(Pa)", legend = legend)  
     
 
     

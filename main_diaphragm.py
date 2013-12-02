@@ -42,18 +42,17 @@ def excelwrite(P):
     
 if __name__ == '__main__':
     plt.close("all") # close all previous figures
-    P_max = 2 * 1e5
+    P_max = 1.5 * 1e5
     P = np.arange(0,P_max + P_max / 2000.0,P_max/2000.0 )
     #Consideration of only tensile stresses
 #    plt.figure("Flat diaphragm:P vs. y(tensile)")
-#    plotPvsyTensile(P, diaphNB40_50, "Single Diaphragm 40 and 50NB")
+    plotPvsyTensile(P, diaphNB40_50, "Single Diaphragm 40 and 50NB")
 #    plotPvsyTensile(P, diaphNB15_20, "Diaphragm 15 and 20NB")
 #    plotPvsyTensile(P, diaphNB25, "Diaphragm 25NB")
 #    plt.title("Pressure vs deflection considering tensile")
     #considering of tensile and bending stresses
     plt.figure("Flat diaphragm:P vs. y(tensile + bending)")
     plotPvsyTensileBending(P, diaphNB40_50, "Diaphragm 40 and 50NB")
-    plt.savefig("flat.pdf", orientation = 'landscape')
 #    plotPvsyTensileBending(P, diaphNB15_20, "Diaphragm 15 and 20NB")
 #    plotPvsyTensileBending(P, diaphNB25, "Diaphragm 25NB")
 #    plt.title("Pressure vs deflection considering tensile and bending")
@@ -70,6 +69,11 @@ if __name__ == '__main__':
 #    plt.figure()
 #    plotPvsyTensileBending(P, BPTdiaph, "BPT")
     #excelwrite(P)
+    plt.figure()
+    plotPvsyTensileBending(P, diaphNB15_20, "Diaphragm 15 NB")
+    plt.figure()
+    plotPvsyTensileBending(P, diaphNB15_20_double, "Diaphragm 15NB double thickness")
+    plt.show()
     
     
     

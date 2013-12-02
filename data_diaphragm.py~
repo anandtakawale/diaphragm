@@ -47,6 +47,7 @@ class Diaphragm():
         self.mu = material.mu
         self.G = material.G
         self.name = name
+        self.b = b/2.0 * 1e-3
     
     def assignProp(self, other):
         """
@@ -59,21 +60,11 @@ class Diaphragm():
         self.E = other.E
         self.mu = other.mu
         self.G = other.G
+        self.b = other.b
     
     def __str__(self):
         return self.name
-
-class DiaphragmRigid(Diaphragm):
-    """
-    Defines class for rigid flat diaphragm
-    """
-    def __init__(self, D, h, material, name, b):
-        Diaphragm.__init__(self, D, h, material, name)
-        self.b = b / 2.0 * 1e-3
-        self.Ap = 3*(1-self.mu**2)/ 16.0 * (1 - (self.b/self.a)**4 - 4 * (self.b/self.a)**2 * np.log(self.a/self.b))
-        self.Bp = ((7.0 - self.mu)/ 3.0 * (1.0 + (self.b/self.a)**2 + (self.b/self.a)**4) +\
-                   (3.0 - self.mu)**2 / (1.0 + self.mu) * (self.b/ self.a)**2) / (1.0 - self.mu) / (1.0 - (self.b/ self.a)**4) / (1.0 - (self.b/ self.a)**2)**2
-
+        
 class DiaphragmCorrugated(Diaphragm):
     """
     Corrugated diaphragm class inherited from Diaphragm class
@@ -138,10 +129,10 @@ diaphNB15_20_double = Diaphragm(133.5 - 12, 0.3048, SS304, "NB 15 and 20 double 
 diaphNB25_double = Diaphragm(155.6 - 12, 0.3048, SS304, "NB 25 double thickness")
 
 #diaphragms with rigid centres
-diaphNB40_50_rigid = DiaphragmRigid(203.2 - 12, 0.25, SS304, "NB 40 and 50 with rigid center", 90)
-diaphNB25_rigid = DiaphragmRigid(155.6 - 12, 0.1524, SS304, "NB 15 and 20 with rigid center", 80)
-diaphNB15_20_rigid = DiaphragmRigid(133.5 - 12, 0.1524, SS304, "NB 25 with rigid center", 60)
-BT6 = DiaphragmRigid(31.8 - 0.6 , 0.1, SS304, "BT6 bellows single diaphragm", 19.13)
+diaphNB40_50_rigid = Diaphragm(203.2 - 12, 0.25, SS304, "NB 40 and 50 with rigid center", 90)
+diaphNB25_rigid = Diaphragm(155.6 - 12, 0.1524, SS304, "NB 15 and 20 with rigid center", 80)
+diaphNB15_20_rigid = Diaphragm(133.5 - 12, 0.1524, SS304, "NB 25 with rigid center", 60)
+BT6 = Diaphragm(31.8 - 0.6 , 0.1, SS304, "BT6 bellows single diaphragm", 19.13)
 
 #corrugated diaphragms
 diaphNB40_50_corrug = DiaphragmCorrugated(diaphNB40_50, H = 1.2, s= 1, l = 1, name = diaphNB40_50.name + " corrugated")
