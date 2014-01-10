@@ -151,20 +151,20 @@ def plotyvsExtremeRadial(P, diaphragm):
     
 if __name__ == "__main__":
     plt.close("all")
-    P_max = 1e5
+    P_max = 4e5
     P = np.arange(0,P_max + P_max / 1000.0,P_max/1000.0 )
     #considering of tensile and bending stresses
-    plt.figure("Flat diaphragm:P vs. y(tensile + bending) for corrugated diaphragm")
-#    plotPvsyTensileBending(P, diaphNB40_50_corrug, "Diaphragm 40 and 50NB")
-#    plotPvsyTensileBending(P, diaphNB15_20_corrug, "Diaphragm 15 and 20NB")
-#    plotPvsyTensileBending(P, diaphNB25_corrug, "Diaphragm 25NB")
-#    plt.title("Pressure vs deflection considering tensile and bending for corrugated diaphragm")
-#    plt.figure("BPT capsule")
-#    plotPvsyTensileBending(P, BPTCorrug, "BPT diaphragm")
-#    deflection = np.arange(0, 2.5, 0.1)
-#    #plt.plot(Pnew, deflection, 'ro',label = "BPT diaphragm direct method")
-#    plt.figure("Previously manufactured corrugated diaphragm")
-#    plt.title("Pressure vs deflection considering tensile and bending for corrugated diaphragm")\
+    plt.figure("P vs. y(tensile + bending) for corrugated diaphragm")
+    plotPvsyTensileBending(P, diaphNB40_50_corrug, "Diaphragm 40 and 50NB")
+    plotPvsyTensileBending(P, diaphNB15_20_corrug, "Diaphragm 15 and 20NB")
+    plotPvsyTensileBending(P, diaphNB25_corrug, "Diaphragm 25NB")
+    plt.title("Pressure vs deflection considering tensile and bending for corrugated diaphragm")
+    plt.figure("BPT capsule")
+    plotPvsyTensileBending(P, BPTCorrug, "BPT diaphragm")
+    deflection = np.arange(0, 2.5, 0.1)
+    #plt.plot(Pnew, deflection, 'ro',label = "BPT diaphragm direct method")
+    plt.figure("Previously manufactured corrugated diaphragm")
+    plt.title("Pressure vs deflection considering tensile and bending for corrugated diaphragm")
     diaphUsed = premade_corrug
     plotPvsyTensileBending(P, diaphUsed, "Previously manufactured")
     plt.figure("Pressure vs stress")
@@ -176,4 +176,8 @@ if __name__ == "__main__":
     plotyvsExtremeRadial(P, diaphUsed)
     plotyvssigmaR(P, diaphUsed)
     plotyvssigmaT(P, diaphUsed)
+    plt.figure()
+    for diaph in [try1_corrug, try2_corrug, try3_corrug]:
+        plotPvsyTensileBending(P, diaph, diaph.name)
+    #plotPvsyTensileBending(P, premade_corrug, "Previously manufactured")
     plt.show()

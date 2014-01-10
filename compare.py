@@ -16,7 +16,7 @@ import roark_membrane
 
 if __name__ == "__main__":
     plt.close('all')
-    P_max = 2e5
+    P_max = 4e5
     P = np.arange(0,P_max + P_max/1000.0,P_max/1000)
     #considering of tensile and bending stresses
     # for NB40 and 50
@@ -44,7 +44,8 @@ if __name__ == "__main__":
     
     #comparing stresses
     plt.figure("Stress")
-    membrane.plotPvssigmaR(P, diaphNB40_50, "50NB radial stress")
+    plt.plot([0, P_max * 1e-5], [diaphNB40_50.Sut, diaphNB40_50.Sut], label="Ultimate tensile strength")
+    membrane.plotPvssigmaR(P, diaphNB40_50_double, "50NB radial stress")
     corrugated.plotPvssigmaR(P, premade_corrug, "Premade Corrugated radial stress")
     corrugated.plotPvssigmaT(P, premade_corrug, "Premade Corrugated tangential stress")
     plt.figure()
@@ -53,5 +54,6 @@ if __name__ == "__main__":
     corrugated.plotyvsExtremeRadial(P, premade_corrug)
     corrugated.plotyvssigmaR(P, premade_corrug)
     corrugated.plotyvssigmaT(P, premade_corrug)
+    plt.plot([0, 10], [diaphNB40_50.Sut, diaphNB40_50.Sut], label="Ultimate tensile strength")
     plt.show()
     

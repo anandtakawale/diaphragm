@@ -112,7 +112,7 @@ def tensileBendingDeflect(P, diaphragm):
     All parameters follow same system of units(SI).
     """
     coeff = np.zeros((len(P), 4))
-    #coefficiet of y**3
+    #coefficiet of y**3plot
     coeff[:,0] = (7.0 - diaphragm.mu) / (3.0 * (1.0 - diaphragm.mu)) / diaphragm.h**3
     #coefficient of y**2 is already made zero
     #coefficient of y

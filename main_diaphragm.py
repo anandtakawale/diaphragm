@@ -42,7 +42,7 @@ def excelwrite(P):
     
 if __name__ == '__main__':
     plt.close("all") # close all previous figures
-    P_max = 1.5 * 1e5
+    P_max = 17 * 1e5
     P = np.arange(0,P_max + P_max / 2000.0,P_max/2000.0 )
     #Consideration of only tensile stresses
 #    plt.figure("Flat diaphragm:P vs. y(tensile)")
@@ -61,8 +61,8 @@ if __name__ == '__main__':
 #    plotPvsyTensile(P, diaphNB40_50, "Diaphragm 40 and 50NB Tensile")
 #    plotPvsyTensileBending(P, diaphNB40_50, "Diaphragm 40 and 50NB Tensile and Bending")
 #    #plotting radial stresses for NB40,50,15,20,25
-#    plt.figure("Flat diaphargm Pressure vs max radial stress")
-#    plotPvssigmaR(P, diaphNB40_50, "Diaphragm 40 and 50 NB radial stress")
+    plt.figure("Flat diaphargm Pressure vs max radial stress")
+    plotPvssigmaR(P, diaphNB40_50, "Diaphragm 40 and 50 NB radial stress")
 #    plotPvssigmaR(P, diaphNB15_20, "Diaphragm 15 and 20 NB radial stress")
 #    plotPvssigmaR(P, diaphNB25, "Diaphragm 25NB radial stress")
 #    plt.title("Pressure vs. maximum stress")

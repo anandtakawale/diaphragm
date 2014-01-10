@@ -91,8 +91,7 @@ def rigidCentreDeflect(P, diaphragm):
     """
     if isShear(diaphragm):
         raise ValueError("Shear stresses need to be considered")
-    Bp = calcBp(diaphragm)
-    return (P * diaphragm.a**4 / ((diaphragm.E * diaphragm.h) * Bp))**(1.0/3)
+    return (P * diaphragm.a**4 / ((diaphragm.E * diaphragm.h) * diaphragm.Bp))**(1.0/3)
     
 def isShear(diaphragm):
     """
@@ -140,7 +139,7 @@ def plotPvssigmaR(P, diaphragm, legend):
     Plots variation of maximum radial stress with pressure
     """
     #maximum deflection for given pressure
-    deflect = detDeflectTensile(P, diaphragm)
+    deflect = rigidCentreDeflect(P, diaphragm)
     sigma_max = [sigmaRmax(y, diaphragm) for y in deflect]
     graph([p * 1e-5 for p in P], sigma_max, "Pressure(Pa)", "Radial Stress(Pa)", legend = legend)  
     

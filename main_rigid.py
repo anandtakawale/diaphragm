@@ -28,7 +28,6 @@ if __name__ == '__main__':
     plt.figure()
     plotPvsy(P, BPT_rigid, "BPT")
     plt.show()
-    deflection = detDeflectTensile(P, diaphNB40_50)
 #    for deflect in deflection:
 #        if deflect  > 4.99:
 #            print 

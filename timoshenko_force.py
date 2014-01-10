@@ -15,6 +15,7 @@ def tensileBendingDeflect(F, diaphragm, A, B):
     Returns the deflection for given value of pressure
     The formula used is from Timoshinko
     circular plate loaded at the center
+    Refer page 415 equation (y) of "Theory of plates and shells" by Timoshinko
     
     F: Force in N
     diaphragm: Diaphragm class object used
@@ -61,6 +62,19 @@ if __name__ == "__main__":
     F_max = 5e2
     F = np.arange(0,F_max,F_max/1000.0)
     plt.close('all')
+    plt.figure(figsize=(20, 10), dpi=80, facecolor='w', edgecolor='k')
     diaph = [diaphNB40_50, diaphNB25, diaphNB15_20]
+    plt.plot([0, F_max], [2, 2], lw =2, label = "Deflection of 2 mm")
+    plt.plot([0, F_max], [1.5, 1.5], lw = 2, label = "Deflection of 1.5mm")
+    plt.plot([0, F_max], [0.5, 0.5], lw =2, label = "Deflection of 0.5 mm")
     for diaphUsed in diaph:
-        plotPvsy(F, diaphUsed, "Pressure vs y" + str(diaphUsed.name))
+        plotPvsy(F, diaphUsed, "Force vs y " + str(diaphUsed.name))
+    diaph = [diaphNB40_50_double, diaphNB25_double, diaphNB15_20_double]
+    plt.figure(figsize=(20, 10), dpi=80, facecolor='w', edgecolor='k')
+    plt.plot([0, F_max], [2, 2], lw =2, label = "Deflection of 2 mm")
+    plt.plot([0, F_max], [1.5, 1.5], lw = 2, label = "Deflection of 1.5mm")
+    plt.plot([0, F_max], [0.5, 0.5], lw =2, label = "Deflection of 0.5 mm")
+    for diaphUsed in diaph:
+        plotPvsy(F, diaphUsed, "Force vs y " + str(diaphUsed.name))
+    plt.show()
+    y = tensileBendingDeflect(F, diaphNB40_50, 0.443, 0.217)

@@ -126,7 +126,7 @@ if __name__ == "__main__":
     for diaphUsed in diaph:
         y = tensileBendingDeflect(P, diaphUsed)
         plt.figure(diaphUsed.name)
-        Syt = diaphUsed.Syt * np.ones((len(P), 1))
+        Syt = diaphUsed.Sut * np.ones((len(P), 1))
         #diaphragm yield strength
         plotPvsSigmaRmax(P, diaphUsed)
         maxShear = Syt / 2.0

@@ -12,7 +12,7 @@ def graph(x, y, xlabel = "", ylabel = "", legend = "", color = ""):
     """
     Plots graph of x vs y with given parameters
     """
-    plt.plot(x, y, color, label = legend,)
+    plt.plot(x, y, color, label = legend, lw = 2)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.legend(loc = 'best')

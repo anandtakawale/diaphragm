@@ -65,4 +65,4 @@ if __name__ == "__main__":
     plt.close('all')
     diaph = [diaphNB40_50, diaphNB25, diaphNB15_20]
     for diaphUsed in diaph:
-        plotPvsy(P, diaphUsed, "Pressure vs y")
+        plotPvsy(P, diaphUsed, diaphUsed.name)
