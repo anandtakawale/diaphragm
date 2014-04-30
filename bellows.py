@@ -7,6 +7,7 @@ Created on Mon Dec 02 14:16:35 2013
 import matplotlib.pyplot as plt
 import numpy as np
 import data_diaphragm
+from roark_membrane import sigmaRmax, sigmaEdge
 
 def graph(x, y, xlabel = "", ylabel = "", legend = "", color = ""):
     """
@@ -72,7 +73,7 @@ def plotPvsyTensileBending(P, bellows, legend, color = ""):
         deflect = tensileBendingDeflect(P, bellows) * 1e3 * bellows.n
     else:
         deflect = tensileBendingDeflect(P, bellows) * 1e3
-    graph(P * 1e-5, deflect, "Pressure(Pa)", "Deflection(mm)", legend, color)
+    graph(P * 1e-5, deflect, "Pressure[bar]", "Deflection[mm]", legend, color)
     
 def sigma(P, diaphragm):
     """
@@ -88,29 +89,37 @@ def plotPvssigma(P, diaphragm, legend):
     sigmar = sigma(P, diaphragm)
     plt.plot([0, max(P) * 1e-5], [diaphragm.Syt * 1e-6, diaphragm.Syt * 1e-6], label = "Yield stress")
     plt.plot([0, max(P) * 1e-5], [diaphragm.Sut * 1e-6, diaphragm.Sut * 1e-6], label = "Tensile strength")
-    graph(P * 1e-5, sigmar * 1e-6, xlabel = "Pressure[bar]", ylabel = "Stress[Pa]" ,legend = legend)
+    graph(P * 1e-5, sigmar * 1e-6, xlabel = "Pressure[bar]", ylabel = "Stress[MPa]" ,legend = legend)
     
 if __name__ == "__main__":
     P_max = 2e5
     P = np.arange(0, P_max + P_max/1000.0, P_max/1000.0)
     plt.close('all')
+#    plt.figure()
+#    plotPvsyTensileBending(P, data_diaphragm.BT6diaph, data_diaphragm.BT6diaph.name)
+#    plt.figure()
+#    plotPvsyTensileBending(P, data_diaphragm.BT6Bellow, data_diaphragm.BT6Bellow.name)
+#    plt.plot([0, P_max * 1e-5], [1.0, 1.0], label = "Deflection of 1mm")
+#    plotPvsyTensileBending(P, data_diaphragm.BT6Bellow_hastealloy, data_diaphragm.BT6Bellow_hastealloy.name)
+#    plt.figure()
+#    plotPvsyTensileBending(P, data_diaphragm.minami_bellow, data_diaphragm.minami_bellow.name)
+#    plt.figure()
+#    plotPvssigma(P, data_diaphragm.BT6diaph, data_diaphragm.BT6diaph.name)
+#    plt.figure()
+#    plotPvssigma(P, data_diaphragm.minami_advice, data_diaphragm.minami_advice.name)
+#    plt.figure()
+#    F_max = 5e1 # 50N of maximum force
+#    F = np.linspace(0, F_max, 1001)
+#    plt.plot([  0.     ,   5.2974 ,  11.42865,  24.525  ], [0, 0.5,1,1.5], "o-")
+#    F_bt2 = np.array([0, 0.055, .225, .5, .810,1.13, 1.445, 1.825])
+#    y_bt2 = np.array([0,0.09, 0.26, 0.5, 0.76, 1.02, 1.25, 1.5])
+#    graph(F_bt2 * 9.81 , y_bt2, "Force[N]", "Deflection[mm]","BT6 spirax bellow sample 2", 'o-')
+#    plotForcevsy(F, data_diaphragm.BT6Bellow, data_diaphragm.BT6Bellow.name)
+#    plt.plot([0, F_max], [2.0, 2.0])
+#    plt.figure("Kuze K1630 P vs y")
+#    plotPvsyTensileBending(P, data_diaphragm.K1630_bellow, "Kuze K1630")
+#    plt.figure("Kuze K1630 P vs Stress")
+#    plotPvssigma(P, data_diaphragm.K1630_bellow, "K1630")
     plt.figure()
     plotPvsyTensileBending(P, data_diaphragm.BT6diaph, data_diaphragm.BT6diaph.name)
-    plt.subplot(121)
-    plotPvsyTensileBending(P, data_diaphragm.BT6Bellow, data_diaphragm.BT6Bellow.name)
-    plt.plot([0, P_max * 1e-5], [1.0, 1.0], label = "Deflection of 1mm")
-    plt.subplot(122)
-    plotPvsyTensileBending(P, data_diaphragm.BT6Bellow_hastealloy, data_diaphragm.BT6Bellow_hastealloy.name)
-    plt.figure()
-    plotPvsyTensileBending(P, data_diaphragm.minami_bellow, data_diaphragm.minami_bellow.name)
-    plt.figure()
-    plotPvssigma(P, data_diaphragm.BT6diaph, data_diaphragm.BT6diaph.name)
-    plt.figure()
-    plotPvssigma(P, data_diaphragm.minami_advice, data_diaphragm.minami_advice.name)
-    plt.figure()
-    F_max = 5e1 # 50N of maximum force
-    F = np.linspace(0, F_max, 1001)
-    plt.plot([  0.     ,   5.2974 ,  11.42865,  24.525  ], [0, 0.5,1,1.5], "o-")
-    plotForcevsy(F, data_diaphragm.BT6Bellow, data_diaphragm.BT6Bellow.name)
-    plt.plot([0, F_max], [2.0, 2.0])
     plt.show()

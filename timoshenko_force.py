@@ -59,11 +59,12 @@ def plotPvsy(P, diaphragm, legend = "", color = ""):
 
 
 if __name__ == "__main__":
-    F_max = 5e2
+    F_max = 3e2
     F = np.arange(0,F_max,F_max/1000.0)
     plt.close('all')
     plt.figure(figsize=(20, 10), dpi=80, facecolor='w', edgecolor='k')
-    diaph = [diaphNB40_50, diaphNB25, diaphNB15_20]
+    diaph = [diaphNB40_50, diaphNB25, diaphNB15_20] #diaph170, dsdp80NB, diaphPilot]
+    diaph_DP143 = [DP143_1520NB, DP143_25NB, DP143_4050NB, DP143_80NB]
     plt.plot([0, F_max], [2, 2], lw =2, label = "Deflection of 2 mm")
     plt.plot([0, F_max], [1.5, 1.5], lw = 2, label = "Deflection of 1.5mm")
     plt.plot([0, F_max], [0.5, 0.5], lw =2, label = "Deflection of 0.5 mm")
@@ -76,5 +77,14 @@ if __name__ == "__main__":
     plt.plot([0, F_max], [0.5, 0.5], lw =2, label = "Deflection of 0.5 mm")
     for diaphUsed in diaph:
         plotPvsy(F, diaphUsed, "Force vs y " + str(diaphUsed.name))
-    plt.show()
     y = tensileBendingDeflect(F, diaphNB40_50, 0.443, 0.217)
+    plt.figure("DP143 diaphragm characteristics")
+    plt.plot([0, F_max], [3, 3], lw =2, label = "Deflection of 3 mm")
+    plt.plot([0, F_max], [2.2, 2.2], lw =2, label = "Deflection of 2.2 mm")
+    plt.plot([0, F_max], [1.7, 1.7], lw =2, label = "Deflection of 1.7 mm")
+    plt.plot([0, F_max], [1.4, 1.4], lw =2, label = "Deflection of 1.4 mm")
+    plt.plot([0, F_max], [0.9, 0.9], lw =2, label = "Deflection of 0.9 mm")
+    plt.plot([0, F_max], [1.1, 1.1], lw =2, label = "Deflection of 1.1 mm")
+    for diaphUsed in diaph_DP143:
+        plotPvsy(F, diaphUsed, "Force vs y " + str(diaphUsed.name))
+    plt.show()

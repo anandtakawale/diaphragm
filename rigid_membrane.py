@@ -144,5 +144,11 @@ def plotPvssigmaR(P, diaphragm, legend):
     graph([p * 1e-5 for p in P], sigma_max, "Pressure(Pa)", "Radial Stress(Pa)", legend = legend)  
     
 
-    
+def plotyvssigmaR(P, diaphragm, legend):
+    """
+    Plots graph of variation of radial stress with deflection
+    """
+    deflect = rigidCentreDeflect(P, diaphragm)
+    sigma_max = [sigmaRmax(y, diaphragm) for y in deflect]
+    graph(deflect, sigma_max, "Deflection[mm]", "Radial Stress[Pa]", legend = legend)
     

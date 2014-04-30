@@ -6,10 +6,11 @@ Created on Thu Aug 29 15:56:56 2013
 """
 from rigid_membrane import *
 import numpy as np
+from roark_membrane import sigmaEdge
 
 if __name__ == '__main__':    
     plt.close("all") # close all previous figures
-    P_max = 4 * 10**5
+    P_max = 5 * 10**5
     P = np.arange(0,P_max,P_max/1000.0)
     #Consideration of only tensile stresses
     plt.figure("Rigid diaphragm: P vs y")
@@ -23,12 +24,16 @@ if __name__ == '__main__':
     plotPvssigmaR(P, diaphNB15_20_rigid, "Diaphragm 15 and 20 NB radial stress")
     plotPvssigmaR(P, diaphNB25_rigid, "Diaphragm 25NB radial stress")
     sigma_allow = [maxShear(diaphNB25_rigid) for x in range(len(P))]
-    graph(P, sigma_allow, "Pressure(Pa)", "Radial Stress(Pa)", legend = "Maximum allowable")
+    graph(P * 1e-5, sigma_allow, "Pressure(Pa)", "Radial Stress(Pa)", legend = "Maximum allowable")
     plt.title("Pressure vs. maximum stress for rigid diaphragm")
     plt.figure()
-    plotPvsy(P, BPT_rigid, "BPT")
+    plotPvsy(P, BT6diaph, "BT6 diaphragm pressure vs deflection")
+    plt.figure()
+    plotyvssigmaR(P, BT6diaph, "BT6 diaphragm stress vs deflection")
+    plt.figure()
+    plotPvssigmaR(P, BT6diaph, "BT6 diaphragm")
+    plt.plot([min(P) * 1e-5, max(P) * 1e-5], [BT6diaph.Syt, BT6diaph.Syt], label = "Yield strength")
+    deflect = detDeflectTensile(P, BT6diaph)
+    sigmaEdgeBT6 = [sigmaEdge(d, BT6diaph) for d in deflect]
+    graph(P * 1e-5, sigmaEdgeBT6, xlabel = "Pressure [bar]", ylabel = "Edge stress[Pa]", legend = "Pressure vs Edge stress")
     plt.show()
-#    for deflect in deflection:
-#        if deflect  > 4.99:
-#            print 
-#            break

@@ -27,6 +27,15 @@ if __name__ == "__main__":
     F_bt_N = F_bt * 9.81
     #deflection in mm
     y_bt = np.array([0, 0.5, 1, 1.5])
+    #
+    F_bt2 = np.array([0, 0.055, .225, .5, .810,1.13, 1.445, 1.825])
+    y_bt2 = np.array([0,0.09, 0.26, 0.5, 0.76, 1.02, 1.25, 1.5])
+    graph(F_bt2, y_bt2, "Force[kg]", "Deflection[mm]","BT6 spirax bellow sample 2", 'o-')
+    coeff_bt2 = np.polyfit(F_bt2, y_bt2, 1)
+    polynomial = np.poly1d(coeff_bt2)
+    F_fitted = np.linspace(0, 2.5)
+    y_fitted = polynomial(F_fitted)
+    graph(F_fitted, y_fitted, "Force[kg]", "Deflection[mm]", "BT6 bellows- Spirax 1st degree Curve fitted sample2", 'r-')
     #mewasa corrugated bellows
     F_m = np.array([0, 0.835, 1.28, 1.72, 2.27])
     F_m_N = F_m * 9.81
@@ -54,3 +63,4 @@ if __name__ == "__main__":
     plt.figure()
     graph(F_bt_N, y_bt, "Force[N]", "Deflection[mm]", "BT6 bellows- Spirax Experimental")
     graph(F_m_N, y_m, "Force[N]", "Deflection[mm]", "Mewasa bellows Experimental")
+    

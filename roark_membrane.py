@@ -135,4 +135,3 @@ if __name__ == "__main__":
         graph(P * 1e-5, maxShear, "Pressure[Pa]", "Stress[Pa]", "Maximum shear stress")
         #maximum radial stress which is at the center
         plotPvsSigmaEdge(P, diaphUsed)
-    
